@@ -13,7 +13,7 @@ router.post('/students', tenantAuth(['admin', 'teacher']), async (req, res) => {
         const newStudent = new Student({ tenantId, name, class: className,email });
         await newStudent.save();
 
-        // Increment totalStudents 
+        // Increment totalStudents in collection
         await School.findOneAndUpdate(
             { tenantId },
             { $inc: { totalStudents: 1 } },
@@ -47,7 +47,7 @@ router.post('/classes', tenantAuth(['admin']), async (req, res) => {
         const newClass = new Class({ tenantId, name, teacherId });
         await newClass.save();
 
-        // Increment totalClasses 
+        // Increment totalClasses in the School collection
         await School.findOneAndUpdate(
             { tenantId },
             { $inc: { totalClasses: 1 } },
@@ -121,17 +121,17 @@ router.put('/attendance/:classId', tenantAuth(['admin', 'teacher']), async (req,
         const { attendance } = req.body; // Adjusted to match the expected format
         const tenantId = req.tenantId;
 
-        
+        // Transform the incoming data into the required records array
         const records = Object.entries(attendance).map(([studentId, isPresent]) => ({
             studentId,
-            status: isPresent ? 'Present' : 'Absent', 
+            status: isPresent ? 'Present' : 'Absent', // Map boolean to status strings
         }));
 
         // Update or insert the attendance document
         const updatedAttendance = await Attendance.findOneAndUpdate(
             { tenantId, classId },
             { $set: { records } },
-            { new: true, upsert: true } 
+            { new: true, upsert: true } // Ensure the document is created if it doesn't exist
         );
 
         res.json({
