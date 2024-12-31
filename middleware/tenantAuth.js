@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'your_secret_key'; // Replace with your actual secret key
+const SECRET_KEY = 'Superman@123'; 
 
 const tenantAuth = (roles = []) => (req, res, next) => {
     try {

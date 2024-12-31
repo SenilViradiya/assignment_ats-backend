@@ -16,7 +16,7 @@ mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 app.use(bodyParser.json());
 app.use(cors());
 
-// Routes
+
 app.use('/api/auth', authRoutes);
 app.use('/api/schools', schoolRoutes);
 
